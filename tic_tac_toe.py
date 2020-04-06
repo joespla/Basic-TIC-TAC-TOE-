@@ -16,6 +16,7 @@ def EnterMove(board):
     # La función acepta el estaduo actual del trablero y pregunta al usuario de su movimiento,
     # verifica la entrada y actualiza el tablero acorde a la decisión del usuario
     boardUpdate = board[:]
+    del (mainBoard[:])
     #verification = True
     print("Make a move. Tell me where you want to move: ")
     userMovement = int(input())
@@ -63,20 +64,44 @@ def DrawMove(board):
     #
     # La función dibuja el movimiento de la maquina y actualiza el tablero
     #
-    for i in range(10):
-        print(randrange(8))
+    boardUpdate = board[:]
+    del (mainBoard[:])
+    isNumberInBoard = True
+    machineMovement = randrange(1, 9)
+
+    while isNumberInBoard:
+        for line in range(3):
+            for column in range(3):
+                if boardUpdate[line][column] == "X":
+                    isNumberInBoard = True
+                    machineMovement = randrange(1,9)
+                    break
+            isNumberInBoard = False        
+
+    for line in range(3):
+        for column in range(3):
+            if boardUpdate[line][column] == machineMovement:
+                boardUpdate[line][column] = 'X'
+                break
+    
+    print("The computer is moving...")
+    print("The computer chose position: ", machineMovement)
+    DisplayBoard(boardUpdate)
+    return boardUpdate
 
 
-board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+mainBoard = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 auxBoard = []
 startGame = True
 
 while startGame:
-    auxBoard = EnterMove(board)
-    del (board[:])
-    board = auxBoard[:]
+    auxBoard = DrawMove(mainBoard)
+    mainBoard = auxBoard[:]
     del (auxBoard[:])
-    DisplayBoard(board)
+    auxBoard = EnterMove(mainBoard)
+    mainBoard = auxBoard[:]
+    del (auxBoard[:])
+    DisplayBoard(mainBoard)
     
 
 
