@@ -18,22 +18,30 @@ def EnterMove(board):
     # verifica la entrada y actualiza el tablero acorde a la decisión del usuario
     boardUpdate = board[:]
     del (mainBoard[:])
-    #verification = True
-    print("Make a move. Tell me where you want to move: ")
+    verification = True
+    aux = []
+    count = 1
+    print("Make a move. Tell me where you want to play: ")
     userMovement = int(input())
+
     
-    # Esto va a checar que el movimiento del usuario sea valida
-    '''
-    if userMovement not in boardUpdate:
-        verification = False
-        
-        # Checa que el tiro del usuario sea valido
-        while not verification:
-            print ("Please make a valid move.")
-            userMovement = int(input())
-            if userMovement in boardUpdate:
-                verification = True
-    '''
+    # Verifica los movimiento ya jugados
+    for i in range(3):
+        for j in range(3):
+            if boardUpdate[i][j] == "X" or boardUpdate[i][j] == "O":
+                count += 1
+            else:
+                aux.append(count)
+                count += 1
+
+    # Checa que el movimiento no exista      
+    while verification:
+        if userMovement in aux:
+            verification = False
+        else:
+            print("Make a valid move... Tell me where you want to play: ")
+            DisplayBoard(boardUpdate)
+            userMovement = int(input())    
 
     # Busca la posicion dada por el usuario y la ingresa en el tablero    
     for line in range(3):
@@ -81,11 +89,8 @@ def DrawMove(board):
                 count += 1
           
     while verification:
-        print("Inicio del loop")
-        time.sleep(1)
         if machineMovement in aux:
             verification = False
-            print("Llego a aqui")
         else:
             machineMovement = randrange(1,9)
 
