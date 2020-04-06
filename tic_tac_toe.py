@@ -1,4 +1,5 @@
 from random import randrange
+import time
 
 
 def DisplayBoard(board):
@@ -66,17 +67,27 @@ def DrawMove(board):
     #
     boardUpdate = board[:]
     del (mainBoard[:])
-    isNumberInBoard = True
-    machineMovement = randrange(1, 9)
+    machineMovement = randrange(1, 10)
+    aux = []
+    count = 1
+    verification = True
 
-    while isNumberInBoard:
-        for line in range(3):
-            for column in range(3):
-                if boardUpdate[line][column] == "X":
-                    isNumberInBoard = True
-                    machineMovement = randrange(1,9)
-                    break
-            isNumberInBoard = False        
+    for i in range(3):
+        for j in range(3):
+            if boardUpdate[i][j] == "X" or boardUpdate[i][j] == "O":
+                count += 1
+            else:
+                aux.append(count)
+                count += 1
+          
+    while verification:
+        print("Inicio del loop")
+        time.sleep(1)
+        if machineMovement in aux:
+            verification = False
+            print("Llego a aqui")
+        else:
+            machineMovement = randrange(1,9)
 
     for line in range(3):
         for column in range(3):
