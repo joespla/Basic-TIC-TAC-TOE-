@@ -8,7 +8,7 @@ def DisplayBoard(board):
     #
     for i in range(len(board)):
         for j in board[i]:
-            print (j, end = " ")
+            print(j, end=" ")
         print("\n")
 
 
@@ -21,10 +21,8 @@ def EnterMove(board):
     verification = True
     aux = []
     count = 1
-    print("Make a move. Tell me where you want to play: ")
-    userMovement = int(input())
+    userMovement = int(input("Make a move. Tell me where you want to play: "))
 
-    
     # Verifica los movimiento ya jugados
     for i in range(3):
         for j in range(3):
@@ -34,22 +32,22 @@ def EnterMove(board):
                 aux.append(count)
                 count += 1
 
-    # Checa que el movimiento no exista      
+    # Checa que el movimiento no exista
     while verification:
         if userMovement in aux:
             verification = False
         else:
-            print("Make a valid move... Tell me where you want to play: ")
             DisplayBoard(boardUpdate)
-            userMovement = int(input())    
+            userMovement = int(input("Make a valid move... Tell me where you want to play: "))
 
-    # Busca la posicion dada por el usuario y la ingresa en el tablero    
+    # Busca la posicion dada por el usuario y la ingresa en el tablero
     for line in range(3):
         for column in range(3):
             if boardUpdate[line][column] == userMovement:
                 boardUpdate[line][column] = 'O'
                 break
-            
+
+    DisplayBoard(boardUpdate)
     return boardUpdate
 
 
@@ -61,12 +59,31 @@ def MakeListOfFreeFields(board):
     return None
 
 
-def VictoryFor(board, sign):
+def VictoryFor(board):
     #
     # La función analiza el estatus del tablero para verificar si el jugador que utiliza las 'o' o las 'x' ha ganado el juego
     #
     #
-    return None
+    boardUpdate = board[:]
+
+    if (boardUpdate[0][0] == "X" and boardUpdate[0][1] == "X" and boardUpdate[0][2] == "X") or (boardUpdate[0][0] == "O" and boardUpdate[0][1] == "O" and boardUpdate[0][2] == "O"):
+        return False
+    elif (boardUpdate[1][0] == "X" and boardUpdate[1][1] == "X" and boardUpdate[1][2] == "X") or (boardUpdate[1][0] == "O" and boardUpdate[1][1] == "O" and boardUpdate[1][2] == "O"):
+        return False
+    elif (boardUpdate[2][0] == "X" and boardUpdate[2][1] == "X" and boardUpdate[2][2] == "X") or (boardUpdate[2][0] == "O" and boardUpdate[2][1] == "O" and boardUpdate[2][2] == "O"):
+        return False
+    elif (boardUpdate[0][0] == "X" and boardUpdate[1][0] == "X" and boardUpdate[2][0] == "X") or (boardUpdate[0][0] == "O" and boardUpdate[1][0] == "O" and boardUpdate[2][0] == "O"):
+        return False
+    elif (boardUpdate[0][1] == "X" and boardUpdate[1][1] == "X" and boardUpdate[2][1] == "X") or (boardUpdate[0][1] == "O" and boardUpdate[1][1] == "O" and boardUpdate[2][1] == "O"):
+        return False
+    elif (boardUpdate[0][2] == "X" and boardUpdate[1][2] == "X" and boardUpdate[2][2] == "X") or (boardUpdate[0][2] == "O" and boardUpdate[1][2] == "O" and boardUpdate[2][2] == "O"):
+        return False
+    elif (boardUpdate[0][0] == "X" and boardUpdate[1][1] == "X" and boardUpdate[2][2] == "X") or (boardUpdate[0][0] == "O" and boardUpdate[1][1] == "O" and boardUpdate[2][2] == "O"):
+        return False
+    elif (boardUpdate[0][2] == "X" and boardUpdate[1][1] == "X" and boardUpdate[2][0] == "X") or (boardUpdate[0][2] == "O" and boardUpdate[1][1] == "O" and boardUpdate[2][0] == "O"):
+        return False
+    else:
+        return True
 
 
 def DrawMove(board):
@@ -87,21 +104,20 @@ def DrawMove(board):
             else:
                 aux.append(count)
                 count += 1
-          
+
     while verification:
         if machineMovement in aux:
             verification = False
         else:
-            machineMovement = randrange(1,9)
+            machineMovement = randrange(1, 9)
 
     for line in range(3):
         for column in range(3):
             if boardUpdate[line][column] == machineMovement:
                 boardUpdate[line][column] = 'X'
                 break
-    
-    print("The computer is moving...")
-    print("The computer chose position: ", machineMovement)
+
+    print("The computer is moving... The computer chose position: ", machineMovement)
     DisplayBoard(boardUpdate)
     return boardUpdate
 
@@ -110,14 +126,18 @@ mainBoard = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 auxBoard = []
 startGame = True
 
+
 while startGame:
     auxBoard = DrawMove(mainBoard)
     mainBoard = auxBoard[:]
     del (auxBoard[:])
-    auxBoard = EnterMove(mainBoard)
-    mainBoard = auxBoard[:]
-    del (auxBoard[:])
-    DisplayBoard(mainBoard)
-    
+    startGame = VictoryFor(mainBoard)
+    if startGame:
+        auxBoard = EnterMove(mainBoard)
+        mainBoard = auxBoard[:]
+        del (auxBoard[:])
+        startGame = VictoryFor(mainBoard)
 
-
+print("***************************")
+DisplayBoard(mainBoard)
+print("El juego ha terminado")
